@@ -1,0 +1,7 @@
+[submodule "external/dgp"]
+	path = external/dgp
+	url = https://github.com/TRI-ML/dgp.git
+	branch = v1.5
+[submodule "external/packnet_sfm"]
+	path = external/packnet_sfm
+	url = https://github.com/TRI-ML/packnet-sfm.git

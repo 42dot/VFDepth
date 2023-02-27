@@ -1,0 +1,9 @@
+.DS_Store
+._.DS_Store
+.__pycache__
+*/__pycache__/*
+**/__pycache__/
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+results
+*.pyc

@@ -1,0 +1,16 @@
+--extra-index-url https://download.pytorch.org/whl/cu113
+boto3
+diskcache>=4.1.0 
+matplotlib
+opencv-python>=4.5.3.56
+pycocotools>=2.0.0
+pyquaternion==0.9.5
+pytorch3d
+tensorboardX
+tenacity>=6.0.0
+torch==1.12.0 
+torchaudio==0.12.0
+torchvision==0.13.0
+tqdm
+xarray==2022.6.0
+yacs

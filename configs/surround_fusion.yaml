@@ -1,0 +1,97 @@
+ddp:
+  ddp_enable: False
+  world_size: 1
+  gpus: [0]
+  
+model:
+  num_layers: 18
+  weights_init: True
+
+  #ablation - choose between fusion model(fusion) and baseline model(fsm)
+  depth_model: 'fusion'
+  pose_model: 'fusion'
+  
+  # Pose & depth share same encoder structure
+  fusion_level: 2
+  fusion_feat_in_dim: 256
+  use_skips: False
+  
+  # define the 3D voxel space
+  voxel_unit_size: [1.0, 1.0, 1.5] # size of unit voxel in (m), [x, y, z]
+  voxel_size: [100, 100, 20] # num of voxels in each dimension. [x, y, z]
+  voxel_str_p: [-50.0, -50.0, -15.0] # voxel start point [x, y, z]
+  voxel_pre_dim: [64]
+  proj_d_bins: 50
+  proj_d_str: 2
+  proj_d_end: 50
+
+data:
+  data_path: '/data/DDAD/ddad_train_val/ddad.json'
+  log_dir: './results/'
+  dataset: 'ddad'
+  back_context: 1
+  forward_context: 1
+  depth_type: 'lidar'
+  cameras: ['camera_01', 'camera_05', 'camera_06', 'camera_07', 'camera_08', 'camera_09']
+  train_requirements: (gt_pose, mask)
+  val_requirements: (gt_pose, gt_depth, mask)
+
+training:
+  # Basic
+  height: 384
+  width: 640
+  scales: [0] 
+  frame_ids: [0, -1, 1]
+  
+  # optimization
+  batch_size: 2
+  num_workers: 8
+  learning_rate: 0.0001
+  num_epochs: 20
+  scheduler_step_size: 15
+
+  # model / loss setting
+  ## depth range
+  min_depth: 1.5
+  max_depth: 200.0
+
+  ## spatio & temporal
+  spatio: True
+  spatio_temporal: True
+
+  ## intensity align
+  intensity_align: True
+  
+  ## focal length scaling
+  focal_length_scale: 300
+
+  ## depth synthesis
+  aug_depth: False
+  aug_angle: [15, 15, 40] # 15deg(roll), 15deg(pitch), 40deg(yaw) augmentation
+
+# Loss hyperparams
+loss:
+  disparity_smoothness: 0.001
+  spatio_coeff: 0.03
+  spatio_tempo_coeff: 0.1
+  pose_loss_coeff: 0.0
+  
+eval:
+  eval_batch_size: 4
+  eval_num_workers: 8
+  eval_min_depth: 0
+  eval_max_depth: 200
+  eval_visualize: False
+  syn_visualize: False
+  syn_idx: 245
+  
+load:
+  pretrain: False
+  weights: 'weights_19'
+  models_to_load: ['depth_net']
+  
+logging:
+  early_phase: 2000
+  log_frequency: 100
+  late_log_frequency: 1000
+  save_frequency: 1
