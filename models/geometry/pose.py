@@ -23,7 +23,7 @@ class Pose:
         if self.pose_model == 'fusion':
             pose = self.get_single_pose(net, inputs, None)
             pose = self.distribute_pose(pose, inputs['extrinsics'], inputs['extrinsics_inv'])
-        else:         
+        else:
             pose = {}
             for cam in range(self.num_cams):
                 pose[('cam', cam)] = self.get_single_pose(net, inputs, cam)         

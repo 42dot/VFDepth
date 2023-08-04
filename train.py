@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import argparse 
+import os
+
+os.environ["KMP_DUPLICATE_LIB_OK"]="True"
+os.environ["MKL_NUM_THREADS"] = "1"  # noqa F402
+os.environ["NUMEXPR_NUM_THREADS"] = "1"  # noqa F402
+os.environ["OMP_NUM_THREADS"] = "1"  # noqa F402
 
 import torch
 torch.backends.cudnn.deterministic = True
@@ -25,7 +31,7 @@ from trainer import VFDepthTrainer
 
 def parse_args():
     parser = argparse.ArgumentParser(description='VFDepth training script')
-    parser.add_argument('--config_file', default ='./configs/surround_fusion.yaml', type=str, help='Config yaml file')
+    parser.add_argument('--config_file', default ='./configs/ddad/ddad_surround_fusion.yaml', type=str, help='Config yaml file')
     args = parser.parse_args()
     return args
 

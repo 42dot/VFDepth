@@ -2,7 +2,9 @@
 boto3
 diskcache>=4.1.0 
 matplotlib
+nuscenes-devkit
 opencv-python>=4.5.3.56
+protobuf==3.20.3
 pycocotools>=2.0.0
 pyquaternion==0.9.5
 pytorch3d
@@ -14,3 +16,4 @@ torchvision==0.13.0
 tqdm
 xarray==2022.6.0
 yacs
+Pillow==9.5.0

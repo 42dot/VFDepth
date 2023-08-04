@@ -6,4 +6,5 @@
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 results
+input_data
 *.pyc

@@ -35,17 +35,35 @@ pip install -r requirements.txt
 ```
 
 ## Datasets
-#### DDAD dataset
+### DDAD 
 * DDAD dataset can be downloaded by running:
 
 ```shell
 curl -s https://tri-ml-public.s3.amazonaws.com/github/DDAD/datasets/DDAD.tar 
 ```
 
-* Dataset path needs to be specified in the `config/<config-name>`.
-* For initial path: `data/<dataset-name>`
+* Place the dataset in `input_data/DDAD/`
 * We manually created mask image for scene of ddad dataset and are provided in `dataset/ddad_mask`
 
+### NuScenes 
+* Download NuScenes official dataset
+* Place the dataset in `input_data/nuscenes/`
+* Scenes with backward and forward contexts are listed in `dataset/nuscenes/`
+* Scenes with low visibility are filtered in `dataset/nuscenes/val.txt`
+
+Data should be as follows:
+```
+├── input_data
+│   ├── DDAD
+│   │   ├── ddad_train_val
+│   │   ├── ddad_test
+│   ├── nuscenes
+│   │   ├── maps
+│   │   ├── samples
+│   │   ├── sweeps
+│   │   ├── v1.0-test
+|   |   ├── v1.0-trainval
+```
 ## Main Results
 
 <table>
@@ -61,7 +79,7 @@ curl -s https://tri-ml-public.s3.amazonaws.com/github/DDAD/datasets/DDAD.tar
     <td>d<sub>1.25</sub><sup>3</sup></td>
   </tr>
   <tr>
-    <td rowspan="2"><a href="https://drive.google.com/drive/folders/1bKkbEmXx5R6esJdPg6dOzAdxJy_olPim?usp=sharing"> VFDepth </a> </td>
+    <td rowspan="2"><a href="https://drive.google.com/drive/folders/1UAPjm3pplVPkbS6jLsIFWDmsR8O8dX-1?usp=drive_link"> DDAD </a> </td>
     <td style="text-align:left">Metric</td>
     <td style="text-align:center">0.221</td>
     <td style="text-align:center">4.001</td>
@@ -81,6 +99,27 @@ curl -s https://tri-ml-public.s3.amazonaws.com/github/DDAD/datasets/DDAD.tar
     <td style="text-align:center">0.877</td>
     <td style="text-align:center">0.939</td>
   </tr>
+  <tr>
+    <td rowspan="2"><a href="https://drive.google.com/drive/folders/1CipDGyLCYZcWKQSo1WlLbGsyn2ssL8dI?usp=drive_link"> NuScenes </a> </td>
+    <td style="text-align:left">Metric</td>
+    <td style="text-align:center">0.285</td>
+    <td style="text-align:center">6.662</td>
+    <td style="text-align:center">7.472</td>
+    <td style="text-align:center">0.347</td>
+    <td style="text-align:center">0.741</td>
+    <td style="text-align:center">0.883</td>
+    <td style="text-align:center">0.936</td>
+  </tr>
+  <tr>
+    <td style="text-align:left">Median</td>
+    <td style="text-align:center">0.258</td>
+    <td style="text-align:center">4.282</td>
+    <td style="text-align:center">7.226</td>
+    <td style="text-align:center">0.329</td>
+    <td style="text-align:center">0.735</td>
+    <td style="text-align:center">0.883</td>
+    <td style="text-align:center">0.937</td>
+  </tr>  
 </table>
 
 ## Get Started
@@ -92,9 +131,9 @@ Surround-view fusion depth estimation model can be trained from scratch.
 Training the model using single-GPU: \
 (Note that, due to usage of packnet-sfm submodule, userwarning repetitively occurs and therefore ignored while training.) 
 ```shell
-python -W ignore train.py --config_file='./configs/surround_fusion.yaml'
+python -W ignore train.py --config_file='./configs/ddad/ddad_surround_fusion.yaml'
+python -W ignore train.py --config_file='./configs/nuscenes/nusc_surround_fusion.yaml'
 ```
-
 
 **Multi-GPU** <br>
 Training the model using Multi-GPU:
@@ -103,7 +142,8 @@ Training the model using Multi-GPU:
 * DDP address and port setting can be configured in [ddp.py](utils/ddp.py)
 
 ```shell
-python -W ignore train.py --config_file='./configs/ddp/surround_fusion_ddp.yaml' 
+python -W ignore train.py --config_file='./configs/ddad/ddad_surround_fusion_ddp.yaml' 
+python -W ignore train.py --config_file='./configs/nuscenes/nusc_surround_fusion_ddp.yaml'
 ```
 
 ### Evaluation
@@ -115,19 +155,19 @@ python -W ignore eval.py --config_file='./configs/<config-name>'
 
 Evaluation results using the pretrained model can be obtained by using the following command:
 ```shell
-python -W ignore eval.py --config_file='./configs/ddp/surround_fusion.yaml' \
+python -W ignore eval.py --config_file='./configs/<config-name>' \
                          --weight_path='<pretrained-weight-path>'
 ```
 
 ### Depth Synthesis
 To obtain synthesized depth results, train the model from scratch by running: 
 ```shell
-python -W ignore train.py --config_file='./configs/surround_fusion_augdepth.yaml'
+python -W ignore train.py --config_file='./configs/ddad/ddad_surround_fusion_augdepth.yaml'
 ```
 
 Then evaluate the model by running:
 ```shell
-python -W ignore eval.py --config_file='./configs/surround_fusion_augdepth.yaml'
+python -W ignore eval.py --config_file='./configs/ddad/ddad_surround_fusion_augdepth.yaml'
 ```
 
 * The synthesized results are stored `results/<config-name>/syn_results`

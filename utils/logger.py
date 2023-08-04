@@ -205,7 +205,7 @@ class Logger:
         for cam in range(self.num_cams):
             target_view = outputs['cam', cam]
 
-            depth_gt = inputs["depth"][:, cam, ...]
+            depth_gt = inputs['depth'][:, cam, ...]
             
             _, _, h, w = depth_gt.shape
 
@@ -215,7 +215,8 @@ class Logger:
                          min_eval_depth, max_eval_depth)
             depth_pred = depth_pred.detach()
 
-            mask = (depth_gt > min_eval_depth) * (depth_gt < max_eval_depth)
+            mask = (depth_gt > min_eval_depth) * (depth_gt < max_eval_depth) * inputs['mask'][:, cam, ...]
+            mask = mask.bool()
             
             depth_gt = depth_gt[mask]
             depth_pred = depth_pred[mask]

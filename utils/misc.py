@@ -5,6 +5,7 @@ from collections import defaultdict
  
 import torch
 
+_NUSC_CAM_LIST = ['CAM_FRONT', 'CAM_FRONT_LEFT', 'CAM_FRONT_RIGHT', 'CAM_BACK_LEFT', 'CAM_BACK_RIGHT', 'CAM_BACK']
 _DDAD_CAM_LIST = ['camera_01', 'camera_05', 'camera_06', 'camera_07', 'camera_08', 'camera_09']
 _REL_CAM_DICT = {0: [1,2], 1: [0,3], 2: [0,4], 3: [1,5], 4: [2,5], 5: [3,4]}
 
@@ -17,6 +18,8 @@ def camera2ind(cameras):
     for cam in cameras:
         if cam in _DDAD_CAM_LIST:
             ind = _DDAD_CAM_LIST.index(cam)
+        elif cam in _NUSC_CAM_LIST:
+            ind = _NUSC_CAM_LIST.index(cam)
         else:
             ind = None
         indices.append(ind)

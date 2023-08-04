@@ -1,7 +1,7 @@
 ddp:
-  ddp_enable: False
-  world_size: 1
-  gpus: [0]
+  ddp_enable: True
+  world_size: 4
+  gpus: [0,1,2,3]
   
 model:  
   num_layers: 18
@@ -12,28 +12,28 @@ model:
   pose_model: 'fsm'
 
 data:
-  data_path: '/data/DDAD/ddad_train_val/ddad.json'
+  data_path: './input_data/nuscenes/'
   log_dir: './results/'
-  dataset: 'ddad'
+  dataset: 'nuscenes'
   back_context: 1
   forward_context: 1
   depth_type: 'lidar'
-  cameras: ['camera_01', 'camera_05', 'camera_06', 'camera_07', 'camera_08', 'camera_09']
+  cameras: ['CAM_FRONT', 'CAM_FRONT_LEFT', 'CAM_FRONT_RIGHT', 'CAM_BACK_LEFT', 'CAM_BACK_RIGHT', 'CAM_BACK']
   train_requirements: (gt_pose, mask)
   val_requirements: (gt_pose, gt_depth, mask)
 
 training:
   # Basic
-  height: 384
+  height: 352
   width: 640
   scales: [0] 
   frame_ids: [0, -1, 1]
   
   # optimization
   batch_size: 2
-  num_workers: 8
+  num_workers: 2
   learning_rate: 0.0001
-  num_epochs: 20
+  num_epochs: 4
   scheduler_step_size: 15
   
   # Depth synthesis
@@ -43,7 +43,7 @@ training:
   # model / loss setting
   ## Depth range
   min_depth: 1.5
-  max_depth: 200.0
+  max_depth: 80.0
 
   ## Spatio & temporal
   spatio: True
@@ -64,16 +64,16 @@ loss:
   
 eval:
   eval_batch_size: 4
-  eval_num_workers: 8
+  eval_num_workers: 4
   eval_min_depth: 0
-  eval_max_depth: 200
+  eval_max_depth: 80
   eval_visualize: False
   syn_visualize: False
   syn_idx: None
 
 load:
   pretrain: False
-  weights: 'weights_19'
+  weights: 'weights_3'
   models_to_load: ['depth_net']
   
 logging:

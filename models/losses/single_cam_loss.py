@@ -42,10 +42,10 @@ class SingleCamLoss(BaseLoss):
             )
 
         identity_reprojection_losses = torch.cat(identity_reprojection_losses, 1)
+        identity_reprojection_losses = identity_reprojection_losses + \
+                                        _EPSILON * torch.randn(identity_reprojection_losses.shape).to(self.rank)
         identity_reprojection_loss, _ = torch.min(identity_reprojection_losses, dim=1, keepdim=True)             
-        identity_reprojection_loss = identity_reprojection_loss \
-            + _EPSILON * torch.randn(identity_reprojection_loss.shape).to(self.rank)           
-        
+           
         # find minimum losses
         reprojection_auto_mask = compute_auto_masks(reprojection_loss, identity_reprojection_loss)
         reprojection_auto_mask *= ref_mask
